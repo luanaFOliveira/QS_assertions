@@ -1,3 +1,7 @@
+
+
+
+
 @Test
 public void testAdicionarProdutosAoEstoque() {
     // cria uma lista de produtos
