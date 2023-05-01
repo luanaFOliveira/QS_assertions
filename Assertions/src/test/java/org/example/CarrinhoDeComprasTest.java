@@ -8,8 +8,11 @@ import org.junit.jupiter.api.Test;
 
 class CarrinhoDeComprasTest {
 
-    private static List<Produto> produtos = new ArrayList<>();
+    private static final List<Produto> produtos = new ArrayList<>();
 
+    /**
+     * Inicializa a lista de produtos da classe
+     */
     @BeforeAll
     public static void init() {
         int i = 0;
@@ -20,6 +23,25 @@ class CarrinhoDeComprasTest {
         produtos.addAll(List.of(produto1, produto2, produto3, produto4));
     }
 
+    /**
+     * Após efetivar uma compra, o valor dela é subtraído do limite de crédito disponível do cliente.
+     */
+    @Test
+    public void limiteDeCompraDeveSerAtualizadoAposEfetivarCompra_assertEquals() {
+        final var limiteCredito = 550;
+
+        var carrinho = new CarrinhoDeCompras(limiteCredito);
+
+        carrinho.adicionarItemCompra(new ItemCompra(produtos.get(0), 10));
+        var valorComprado = carrinho.efetivarCompra(produtos, 0, 0);
+
+        Assertions.assertEquals(carrinho.getLimiteDeCredito(), limiteCredito - valorComprado);
+    }
+
+    /**
+     * Ao tentar efetivar uma compra, verifica-se se o cliente possui limite de crédito suficiente
+     * para comprar o montante desejado. Se não possui, uma exceção deve ser jogada.
+     */
     @Test
     public void valorTotalDaCompraNaoDeveUltrapassarOLimiteDeCredito_assertThrows() {
         final var limiteCredito = 550;
@@ -32,16 +54,19 @@ class CarrinhoDeComprasTest {
         Assertions.assertThrows(RuntimeException.class, () -> carrinho.efetivarCompra(produtos, 0, 20));
     }
 
+    /**
+     * Ao tentar efetivar uma compra, verifica-se se o cliente possui limite de crédito suficiente
+     * para comprar o montante desejado. Se possui, nenhuma exceção precisa ser jogada.
+     */
     @Test
-    public void limiteDeCompraDeveSerAtualizadoAposEfetivarCompra_assertEquals() {
+    public void valorTotalDaCompraNaoDeveUltrapassarOLimiteDeCredito_assertDoesNotThrow() {
         final var limiteCredito = 550;
 
         var carrinho = new CarrinhoDeCompras(limiteCredito);
 
         carrinho.adicionarItemCompra(new ItemCompra(produtos.get(0), 10));
-        var valorComprado = carrinho.efetivarCompra(produtos, 0, 0);
 
-        Assertions.assertEquals(carrinho.getLimiteDeCredito(), limiteCredito - valorComprado);
+        Assertions.assertDoesNotThrow(() -> carrinho.efetivarCompra(produtos, 0, 20));
     }
 
 }
