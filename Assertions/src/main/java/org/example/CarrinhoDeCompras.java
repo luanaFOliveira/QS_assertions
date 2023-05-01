@@ -68,7 +68,7 @@ public class CarrinhoDeCompras {
         return valorTotal;
     }
 
-    private Produto encontrarProdutoPorCodigo(List<Produto> produtos, String codigo) {
+    public Produto encontrarProdutoPorCodigo(List<Produto> produtos, String codigo) {
         for (Produto produto : produtos) {
             if (produto.getCodigo().equals(codigo)) {
                 return produto;
