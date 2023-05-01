@@ -44,7 +44,7 @@ class CarrinhoDeComprasTest {
         var valorComprado = carrinho.efetivarCompra(produtos, valorDesconto, valorFrete);
 
         // Asserções podem ser importadas para facilitar a chamada
-        assertEquals(valorComprado, 505);
+        assertEquals(510, valorComprado);
     }
 
     /**
@@ -60,7 +60,7 @@ class CarrinhoDeComprasTest {
         var valorComprado = carrinho.efetivarCompra(produtos, valorDesconto, valorFrete);
 
         // Asserções podem ser importadas para facilitar a chamada
-        Assertions.assertEquals(LIMITE_CREDITO - valorComprado, carrinho.getLimiteDeCredito());
+        assertEquals(LIMITE_CREDITO - valorComprado, carrinho.getLimiteDeCredito());
     }
 
     /**
@@ -97,10 +97,10 @@ class CarrinhoDeComprasTest {
         Assertions.assertDoesNotThrow(() -> carrinho.efetivarCompra(produtos, 0, 20));
     }
 
-     /**
+    /**
      * Ao tentar efetivar uma compra, verifica-se se os valores retornados estão de acordo com os testes
      * Se sim, nenhuma exceção precisa ser jogada.
-    */
+     */
     @Test
     public void testCalcularValorTotalCompra() {
         final var limiteCredito = 550;
@@ -109,7 +109,7 @@ class CarrinhoDeComprasTest {
         // Adiciona dois produtos ao carrinho de compras
         carrinhoDeCompras.adicionarItemCompra(new ItemCompra(produtos.get(0), 2));
         carrinhoDeCompras.adicionarItemCompra(new ItemCompra(produtos.get(1), 1));
-
+        
 
         // Calcula o valor total da compra com desconto de R$ 10,00 e frete de R$ 20,00
         double valorTotalCompra = carrinhoDeCompras.efetivarCompra(produtos, 10.0, 20.0);
