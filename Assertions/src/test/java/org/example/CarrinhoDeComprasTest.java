@@ -183,6 +183,37 @@ class CarrinhoDeComprasTest {
 
     }
 
+    /**
+     * Verifica se a lista de itens eh a mesma que a lista criada no carrinho de compras
+     */
+
+    @Test
+    public void carrinhosIguais_assertSame(){
+
+        List<ItemCompra> listaItens = new ArrayList<>();
+        listaItems.add(new ItemCompra(produtos.get(0),10));
+        listaItems.add(new ItemCompra(produtos.get(2),4));
+
+
+        carrinho.adicionarItemCompra(new ItemCompra(produtos.get(0), 10));
+        carrinho.adicionarItemCompra(new ItemCompra(produtos.get(2), 4));
+
+        Assertions.assertSame(listaItens,carrinho.getItensCompra());
+
+    }
+
+    /**
+     * Verifica se apos a remocao de um item no carrinho a lista fica null
+     */
+
+    @Test
+    public void listaItemsVazio_assertNull(){
+        ItemCompra item1 = new ItemCompra(produtos.get(1), 1);
+        carrinho.adicionarItemCompra(item1);
+        carrinho.removerItemCompra(item1);
+        Assertions.assertNull(carrinho.getItensCompra());
+
+    }
 
 
 
