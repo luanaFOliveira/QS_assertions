@@ -97,7 +97,6 @@ class CarrinhoDeComprasTest {
         Assertions.assertDoesNotThrow(() -> carrinho.efetivarCompra(produtos, 0, 20));
     }
 
-<<<<<<< Updated upstream
      /**
      * Ao tentar efetivar uma compra, verifica-se se os valores retornados estão de acordo com os testes
      * Se sim, nenhuma exceção precisa ser jogada.
@@ -125,11 +124,10 @@ class CarrinhoDeComprasTest {
         );
     }
 
-=======
     /**
      * Ao limpar o carrinho, verifica-se se o valor total das compras também zerou
      */
-    @Teste
+    @Test
     public void valorTotaldaCompraDeveSerZeroSeCarrinhoVazio_assertIterableEquals() {
         final var limiteCredito = 550;
         final List<Produto> carrinhoVazio = new ArrayList<>();
@@ -138,7 +136,6 @@ class CarrinhoDeComprasTest {
         var carrinhoItens = carrinho.getItensCompra();
 
         Assertions.assertIterableEquals(carrinhoVazio, carrinhoItens);
-        Assertions.assertEquals(0, carrinho.getValorTotalCompra);
+        Assertions.assertEquals(0, carrinho.getValorTotalCompra());
     }
->>>>>>> Stashed changes
 }
