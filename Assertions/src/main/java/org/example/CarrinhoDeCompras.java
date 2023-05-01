@@ -29,7 +29,7 @@ public class CarrinhoDeCompras {
         itensCompra.remove(itemCompra);
     }
 
-    public double calcularValorTotalCompra(List<Produto> produtos, double valorDesconto, double valorFrete) {
+    public double efetivarCompra(List<Produto> produtos, double valorDesconto, double valorFrete) {
         double valorTotal = 0.0;
         for (ItemCompra itemCompra : itensCompra) {
             Produto produto = encontrarProdutoPorCodigo(produtos, itemCompra.getProduto().getCodigo());
@@ -45,6 +45,11 @@ public class CarrinhoDeCompras {
             }
         }
         valorTotal = valorTotal - valorDesconto + valorFrete;
+
+        if (valorTotal > limiteDeCredito) {
+            throw new RuntimeException("Limite de crédito excedido");
+        }
+
         valorTotalCompra = valorTotal;
         return valorTotal;
     }
