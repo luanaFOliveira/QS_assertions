@@ -72,6 +72,11 @@ class CarrinhoDeComprasTest {
         Assertions.assertDoesNotThrow(() -> carrinho.efetivarCompra(produtos, 0, 20));
     }
 
+    /**
+     *  Verifica se o valor total dos vinhos em estoque eh maior que o valor total de vinhos no carrinho
+     *
+     */
+
     @Test
     public void valorEstoqueProduto_assertTrue(){
         var valorTotalEstoqueVinho = produtos.get(3).getPreco() * produtos.get(3).getQuantidade();
@@ -82,6 +87,10 @@ class CarrinhoDeComprasTest {
         Assertions.assertTrue(valorTotalEstoqueVinho > carrinho.getValorTotalProduto(produtos.get(3).getCodigo()) );
 
     }
+
+    /**
+     * Verifica se a quantidade de produtos no carrinho eh maior que a quantidade de produtos em estoque, o que nao pode ser verdade
+     */
 
     @Test
     public void quantidadeEstoqueMudaAposCompra_assertNotTrue(){
@@ -96,7 +105,9 @@ class CarrinhoDeComprasTest {
 
     }
 
-
+    /**
+     * Verifica se ao adicionar um item ao carrinho este nao eh null
+     */
 
     @Test
     public void carrinhoNotNull_assertNotNull(){
