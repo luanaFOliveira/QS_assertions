@@ -21,7 +21,7 @@ class CarrinhoDeComprasTest {
     }
 
     @Test
-    public void valorTotalDaCompraNaoDeveUltrapassarOLimiteDeCredito() {
+    public void valorTotalDaCompraNaoDeveUltrapassarOLimiteDeCredito_assertThrows() {
         final var limiteCredito = 550;
 
         var carrinho = new CarrinhoDeCompras(limiteCredito);
@@ -30,6 +30,18 @@ class CarrinhoDeComprasTest {
         carrinho.adicionarItemCompra(new ItemCompra(produtos.get(1), 10));
 
         Assertions.assertThrows(RuntimeException.class, () -> carrinho.efetivarCompra(produtos, 0, 20));
+    }
+
+    @Test
+    public void limiteDeCompraDeveSerAtualizadoAposEfetivarCompra_assertEquals() {
+        final var limiteCredito = 550;
+
+        var carrinho = new CarrinhoDeCompras(limiteCredito);
+
+        carrinho.adicionarItemCompra(new ItemCompra(produtos.get(0), 10));
+        var valorComprado = carrinho.efetivarCompra(produtos, 0, 0);
+
+        Assertions.assertEquals(carrinho.getLimiteDeCredito(), limiteCredito - valorComprado);
     }
 
 }

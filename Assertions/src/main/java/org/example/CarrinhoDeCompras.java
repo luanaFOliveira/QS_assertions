@@ -49,7 +49,7 @@ public class CarrinhoDeCompras {
         if (valorTotal > limiteDeCredito) {
             throw new RuntimeException("Limite de crédito excedido");
         }
-
+        limiteDeCredito -= valorTotal;
         valorTotalCompra = valorTotal;
         return valorTotal;
     }
