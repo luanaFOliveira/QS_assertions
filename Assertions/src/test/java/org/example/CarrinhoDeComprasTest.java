@@ -3,6 +3,7 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,17 +32,41 @@ class CarrinhoDeComprasTest {
     }
 
     /**
+     * Ao efetivar uma compra, o valor do frete é somado ao valor do total e o desconto subtraído.
+     */
+    @Test
+    public void valorDaCompraDeveSomarFreteESubtrairDesconto_assertEquals() {
+        carrinho.adicionarItemCompra(new ItemCompra(produtos.get(0), 10));
+
+        final var valorDesconto = 10.0;
+        final var valorFrete = 20.0;
+
+        var valorComprado = carrinho.efetivarCompra(produtos, valorDesconto, valorFrete);
+
+        // Asserções podem ser importadas para facilitar a chamada
+        assertEquals(valorComprado, 505);
+    }
+
+    /**
      * Após efetivar uma compra, o valor dela é subtraído do limite de crédito disponível do cliente.
      */
     @Test
     public void limiteDeCompraDeveSerAtualizadoAposEfetivarCompra_assertEquals() {
         carrinho.adicionarItemCompra(new ItemCompra(produtos.get(0), 10));
 
-        var valorComprado = carrinho.efetivarCompra(produtos, 0, 0);
+        final var valorDesconto = 10.0;
+        final var valorFrete = 20.0;
 
-        Assertions.assertEquals(carrinho.getLimiteDeCredito(), LIMITE_CREDITO - valorComprado);
+        var valorComprado = carrinho.efetivarCompra(produtos, valorDesconto, valorFrete);
+
+        // Asserções podem ser importadas para facilitar a chamada
+        assertEquals(LIMITE_CREDITO - valorComprado, carrinho.getLimiteDeCredito());
     }
 
+    /**
+     * Produtos que não estão na lista de produtos enviada ao carrinho de compras não "existem", e por isso
+     * fazem uma exceção ser jogada.
+     */
     @Test
     public void produtoDeveExistir_assertThrows() {
         carrinho.adicionarItemCompra(new ItemCompra(new Produto("999", "Produto inconsistente", 0.0, 999), 10));
