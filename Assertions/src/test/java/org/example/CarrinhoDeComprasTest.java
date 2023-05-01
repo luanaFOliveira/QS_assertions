@@ -3,6 +3,7 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,17 +32,41 @@ class CarrinhoDeComprasTest {
     }
 
     /**
+     * Ao efetivar uma compra, o valor do frete é somado ao valor do total e o desconto subtraído.
+     */
+    @Test
+    public void valorDaCompraDeveSomarFreteESubtrairDesconto_assertEquals() {
+        carrinho.adicionarItemCompra(new ItemCompra(produtos.get(0), 10));
+
+        final var valorDesconto = 10.0;
+        final var valorFrete = 20.0;
+
+        var valorComprado = carrinho.efetivarCompra(produtos, valorDesconto, valorFrete);
+
+        // Asserções podem ser importadas para facilitar a chamada
+        assertEquals(valorComprado, 505);
+    }
+
+    /**
      * Após efetivar uma compra, o valor dela é subtraído do limite de crédito disponível do cliente.
      */
     @Test
     public void limiteDeCompraDeveSerAtualizadoAposEfetivarCompra_assertEquals() {
         carrinho.adicionarItemCompra(new ItemCompra(produtos.get(0), 10));
 
-        var valorComprado = carrinho.efetivarCompra(produtos, 0, 0);
+        final var valorDesconto = 10.0;
+        final var valorFrete = 20.0;
 
-        Assertions.assertEquals(carrinho.getLimiteDeCredito(), LIMITE_CREDITO - valorComprado);
+        var valorComprado = carrinho.efetivarCompra(produtos, valorDesconto, valorFrete);
+
+        // Asserções podem ser importadas para facilitar a chamada
+        Assertions.assertEquals(LIMITE_CREDITO - valorComprado, carrinho.getLimiteDeCredito());
     }
 
+    /**
+     * Produtos que não estão na lista de produtos enviada ao carrinho de compras não "existem", e por isso
+     * fazem uma exceção ser jogada.
+     */
     @Test
     public void produtoDeveExistir_assertThrows() {
         carrinho.adicionarItemCompra(new ItemCompra(new Produto("999", "Produto inconsistente", 0.0, 999), 10));
@@ -72,6 +97,47 @@ class CarrinhoDeComprasTest {
         Assertions.assertDoesNotThrow(() -> carrinho.efetivarCompra(produtos, 0, 20));
     }
 
+     /**
+     * Ao tentar efetivar uma compra, verifica-se se os valores retornados estão de acordo com os testes
+     * Se sim, nenhuma exceção precisa ser jogada.
+    */
+    @Test
+    public void testCalcularValorTotalCompra() {
+        final var limiteCredito = 550;
+
+        var carrinhoDeCompras = new CarrinhoDeCompras(limiteCredito);
+        // Adiciona dois produtos ao carrinho de compras
+        carrinhoDeCompras.adicionarItemCompra(new ItemCompra(produtos.get(0), 2));
+        carrinhoDeCompras.adicionarItemCompra(new ItemCompra(produtos.get(1), 1));
+
+
+        // Calcula o valor total da compra com desconto de R$ 10,00 e frete de R$ 20,00
+        double valorTotalCompra = carrinhoDeCompras.efetivarCompra(produtos, 10.0, 20.0);
+
+        // Verifica se o valor total da compra está correto
+        Assertions.assertAll("valorTotalCompra",
+                () -> Assertions.assertEquals(120.0, valorTotalCompra),
+                () -> Assertions.assertEquals(120.0, carrinhoDeCompras.getValorTotalCompra()),
+                () -> Assertions.assertEquals(18, produtos.get(0).getQuantidade()),
+                () -> Assertions.assertEquals(199, produtos.get(1).getQuantidade()),
+                () -> Assertions.assertEquals(8, produtos.get(2).getQuantidade())
+        );
+    }
+
+    /**
+     * Ao limpar o carrinho, verifica-se se o valor total das compras também zerou
+     */
+    @Test
+    public void valorTotaldaCompraDeveSerZeroSeCarrinhoVazio_assertIterableEquals() {
+        final var limiteCredito = 550;
+        final List<Produto> carrinhoVazio = new ArrayList<>();
+
+        var carrinho = new CarrinhoDeCompras(limiteCredito);
+        var carrinhoItens = carrinho.getItensCompra();
+
+        Assertions.assertIterableEquals(carrinhoVazio, carrinhoItens);
+        Assertions.assertEquals(0, carrinho.getValorTotalCompra());
+    }
     /**
      *  Verifica se o valor total dos vinhos em estoque eh maior que o valor total de vinhos no carrinho
      *
