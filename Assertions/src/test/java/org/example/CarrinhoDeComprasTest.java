@@ -103,20 +103,17 @@ class CarrinhoDeComprasTest {
      */
     @Test
     public void testCalcularValorTotalCompra() {
-        final var limiteCredito = 550;
-
-        var carrinhoDeCompras = new CarrinhoDeCompras(limiteCredito);
         // Adiciona dois produtos ao carrinho de compras
-        carrinhoDeCompras.adicionarItemCompra(new ItemCompra(produtos.get(0), 2));
-        carrinhoDeCompras.adicionarItemCompra(new ItemCompra(produtos.get(1), 1));
+        carrinho.adicionarItemCompra(new ItemCompra(produtos.get(0), 2));
+        carrinho.adicionarItemCompra(new ItemCompra(produtos.get(1), 1));
 
         // Calcula o valor total da compra com desconto de R$ 10,00 e frete de R$ 20,00
-        double valorTotalCompra = carrinhoDeCompras.efetivarCompra(produtos, 10.0, 20.0);
+        double valorTotalCompra = carrinho.efetivarCompra(produtos, 10.0, 20.0);
 
         // Verifica se o valor total da compra está correto
         Assertions.assertAll("valorTotalCompra",
                 () -> Assertions.assertEquals(120.0, valorTotalCompra),
-                () -> Assertions.assertEquals(120.0, carrinhoDeCompras.getValorTotalCompra()),
+                () -> Assertions.assertEquals(120.0, carrinho.getValorTotalCompra()),
                 () -> Assertions.assertEquals(18, produtos.get(0).getQuantidade()),
                 () -> Assertions.assertEquals(199, produtos.get(1).getQuantidade()),
                 () -> Assertions.assertEquals(8, produtos.get(2).getQuantidade())
@@ -128,10 +125,8 @@ class CarrinhoDeComprasTest {
      */
     @Test
     public void valorTotaldaCompraDeveSerZeroSeCarrinhoVazio_assertIterableEquals() {
-        final var limiteCredito = 550;
         final List<Produto> carrinhoVazio = new ArrayList<>();
 
-        var carrinho = new CarrinhoDeCompras(limiteCredito);
         var carrinhoItens = carrinho.getItensCompra();
 
         Assertions.assertIterableEquals(carrinhoVazio, carrinhoItens);
