@@ -21,6 +21,10 @@ public class CarrinhoDeCompras {
         return valorTotalCompra;
     }
 
+    public List<ItemCompra> getItensCompra() {
+        return itensCompra;
+    }
+
     public void adicionarItemCompra(ItemCompra itemCompra) {
         itensCompra.add(itemCompra);
     }
