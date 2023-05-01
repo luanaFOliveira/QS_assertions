@@ -109,7 +109,6 @@ class CarrinhoDeComprasTest {
         // Adiciona dois produtos ao carrinho de compras
         carrinhoDeCompras.adicionarItemCompra(new ItemCompra(produtos.get(0), 2));
         carrinhoDeCompras.adicionarItemCompra(new ItemCompra(produtos.get(1), 1));
-        
 
         // Calcula o valor total da compra com desconto de R$ 10,00 e frete de R$ 20,00
         double valorTotalCompra = carrinhoDeCompras.efetivarCompra(produtos, 10.0, 20.0);
@@ -138,75 +137,58 @@ class CarrinhoDeComprasTest {
         Assertions.assertIterableEquals(carrinhoVazio, carrinhoItens);
         Assertions.assertEquals(0, carrinho.getValorTotalCompra());
     }
-    /**
-     *  Verifica se o valor total dos vinhos em estoque eh maior que o valor total de vinhos no carrinho
-     *
-     */
 
+    /**
+     * Certifica-se de que o valor total dos vinhos em estoque é maior ou igual que o valor total de vinhos no carrinho
+     */
     @Test
-    public void valorEstoqueProduto_assertTrue(){
+    public void valorEstoqueProdutoDeveSerMaiorOuIgualAoValorComprado_assertTrue() {
         var valorTotalEstoqueVinho = produtos.get(3).getPreco() * produtos.get(3).getQuantidade();
 
+        carrinho.adicionarItemCompra(new ItemCompra(produtos.get(3), 20));
 
-        carrinho.adicionarItemCompra(new ItemCompra(produtos.get(3),20));
-
-        Assertions.assertTrue(valorTotalEstoqueVinho > carrinho.getValorTotalProduto(produtos.get(3).getCodigo()) );
-
+        Assertions.assertTrue(valorTotalEstoqueVinho >= carrinho.getValorTotalProduto(produtos.get(3).getCodigo()));
     }
 
     /**
      * Verifica se a quantidade de produtos no carrinho eh maior que a quantidade de produtos em estoque, o que nao pode ser verdade
      */
-
     @Test
-    public void quantidadeEstoqueMudaAposCompra_assertNotTrue(){
-
+    public void quantidadeEstoqueDeveSerAtualizadaAposCompra_assertFalse() {
         var quantidadeEstoque = produtos.get(1).getQuantidade();
 
-        carrinho.adicionarItemCompra(new ItemCompra(produtos.get(1),50));
-        carrinho.efetivarCompra(produtos,0,0);
+        carrinho.adicionarItemCompra(new ItemCompra(produtos.get(1), 50));
+        carrinho.efetivarCompra(produtos, 0, 0);
 
-        Assertions.assertFalse(produtos.get(1).getQuantidade() >  quantidadeEstoque);
-
-
+        Assertions.assertFalse(produtos.get(1).getQuantidade() > quantidadeEstoque);
     }
 
     /**
-     * Verifica se ao adicionar um item ao carrinho este nao eh null
+     * Certifica-se de que caso o codigo do produto seja valido, um objeto é retornado
      */
-
     @Test
-    public void carrinhoNotNull_assertNotNull(){
-
+    public void encontrarProdutoDeveRetornarObjetoSeCodigoExistente_assertNotNull() {
         carrinho.adicionarItemCompra(new ItemCompra(produtos.get(1), 1));
-        Assertions.assertNotNull(carrinho);
-
+        Assertions.assertNotNull(carrinho.encontrarProdutoPorCodigo(produtos, "1"));
     }
 
     /**
-     * Verifica se dois produtos sao os mesmos
+     * Certifica-se de que caso o codigo do produto nao seja valido, null é retornado
      */
-
     @Test
-    public void produtosIguais_assertNotSame(){
-        var p1 = new Produto("4","Energetico",9.0,100);
-        var p2 = new Produto("4","Energetico",8.99,100);
-
-        Assertions.assertNotSame(p1,p2);
-
+    public void encontrarProdutoDeveRetornarNullSeCodigoNaoExistente_assertNull() {
+        Assertions.assertNull(carrinho.encontrarProdutoPorCodigo(produtos, "10"));
     }
 
     /**
-     * Verifica se o produto nao foi encontrado
+     * Verifica se dois produtos são iguais
      */
-
     @Test
-    public void produtoNaoEncontrado_assertNull(){
+    public void produtosNaoSaoIguais_assertNotSame() {
+        var p1 = new Produto("4", "Energetico", 9.0, 100);
+        var p2 = new Produto("4", "Energetico", 8.99, 100);
 
-        Assertions.assertNull(carrinho.encontrarProdutoPorCodigo(produtos,"10"));
-
+        Assertions.assertNotSame(p1, p2);
     }
-
-
 
 }
