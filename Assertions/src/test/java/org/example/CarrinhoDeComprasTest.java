@@ -72,4 +72,41 @@ class CarrinhoDeComprasTest {
         Assertions.assertDoesNotThrow(() -> carrinho.efetivarCompra(produtos, 0, 20));
     }
 
+    @Test
+    public void valorEstoqueProduto_assertTrue(){
+        var valorTotalEstoqueVinho = produtos.get(3).getPreco() * produtos.get(3).getQuantidade();
+
+
+        carrinho.adicionarItemCompra(new ItemCompra(produtos.get(3),20));
+
+        Assertions.assertTrue(valorTotalEstoqueVinho > carrinho.getValorTotalProduto(produtos.get(3).getCodigo()) );
+
+    }
+
+    @Test
+    public void quantidadeEstoqueMudaAposCompra_assertNotTrue(){
+
+        var quantidadeEstoque = produtos.get(1).getQuantidade();
+
+        carrinho.adicionarItemCompra(new ItemCompra(produtos.get(1),50));
+        carrinho.efetivarCompra(produtos,0,0);
+
+        Assertions.assertFalse(produtos.get(1).getQuantidade() >  quantidadeEstoque);
+
+
+    }
+
+
+
+    @Test
+    public void carrinhoNotNull_assertNotNull(){
+
+        carrinho.adicionarItemCompra(new ItemCompra(produtos.get(1), 1));
+        Assertions.assertNotNull(carrinho);
+
+    }
+
+
+
+
 }
